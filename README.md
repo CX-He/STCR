@@ -1,6 +1,6 @@
 # STCR
 Matlab demos for a hyperspectral image restoration method STCR.
 
-Submitted to IEEE Transactions on Image Processing.
+The source code is being refactored for better reading, we will upload the complete code ASAP.
 
-The codes will be published once the manuscript is accepted.
+Thank you for your attention!
