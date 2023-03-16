@@ -37,11 +37,11 @@ for iter = 1:p_Iter
 %     W = 1./(abs((Y-B*C)+eps)); 
 %     S = Thres_21((Y-B*C),W.*p_RegS);
     %% update Z
-    C = (p_RegLR*Spa_Img + B'*(Y-S)) ./ (p_RegLR*Spa_Wei + mu);
+    C = (p_RegLR*Spa_Img + mu*B'*(Y-S)) ./ (p_RegLR*Spa_Wei + mu);
     %% update E
     H2 = C*C';
     [U,Sig,~] = svd(H2);
-    H3 = (Y-S)*C'*(1/mu);
+    H3 = (Y-S)*C';
     B = real(ifft((1./(F_H1*eye(L, p_SubDim)+(Sig*ones(p_SubDim, L))')).*(fft(H3)*U)))*U';
     
     %% Verbose
