@@ -3,17 +3,17 @@ function [Ys] = STCR_Denoising_fast(Y_3D, XT, p_PatchLength, p_PatchNum, p_SubDi
 
 %% Init
 Y = reshape(Y_3D, M*N, L)';
-[~, Rw]    = estNoise(Y, 'additive', 'off');
+[~, Rw] = estNoise(Y, 'additive', 'off');
 Y = sqrt(inv(Rw))*Y;
 
-[B,~,~]=svd(Y,'econ');
+[B,~,~] = svd(Y,'econ');
 B = B(:,1:p_SubDim); % size of band*sub_dim
 
 mu = 1;
-D  = diag(-ones(L,1))+diag(ones(L-1,1),1);
+D = diag(-ones(L,1))+diag(ones(L-1,1),1);
 D(L,1) = 1;
 H1 = (2/mu).*(D*D');
-F_H1   = abs(fft(H1));
+F_H1 = abs(fft(H1));
 
 %% Low-rank dec.
 C = reshape((B'*Y)', M, N, p_SubDim);
@@ -29,8 +29,8 @@ Spa_Wei = reshape(Spa_Wei, M*N, p_SubDim)';
 % Ys=reshape(Ys',M,N,L);
 % [mpsnr,~] = MPSNR(XT,Ys);
 % [msam, ~] = MMSA(XT, Ys);
-% q_psnr_i(1)=mpsnr;
-% q_sam_i(1)=msam;
+% q_psnr_i(1) = mpsnr;
+% q_sam_i(1) = msam;
 for iter = 1:p_Iter
     %% update S
     S = Thres_1( Y-B*C, p_RegS );
@@ -51,12 +51,12 @@ for iter = 1:p_Iter
 %     [mpsnr,~] = MPSNR(XT,Ys);
 %     [msam, ~] = MMSA(XT, Ys);
 %     q_psnr_i(iter+1) = mpsnr;
-%     q_sam_i(iter+1)=msam;
-%     if mod(iter, 10)==1
+%     q_sam_i(iter+1) = msam;
+%     if mod(iter, 10) == 1
 %         disp(['Iter = ' num2str(iter) '; tol = ' num2str(norm(Ys(:)-Ys_last(:),'fro')/norm(Ys_last(:),'fro'))...
 %             '; psnr = ' num2str(q_psnr_i(iter+1)) '; sam = ' num2str(q_sam_i(iter+1)) ';']);
 %     end
 end
 Ys = sqrt(Rw)*(B*C);
-Ys = reshape(Ys',M,N,L);
+Ys = reshape(Ys', M, N, L);
 end
